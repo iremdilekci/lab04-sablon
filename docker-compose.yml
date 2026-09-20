@@ -16,7 +16,7 @@ services:
     image: dpage/pgadmin4
     container_name: vtys-pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: ogrenci@vtys.local
+      PGADMIN_DEFAULT_EMAIL: ogrenci@firat.edu.tr
       PGADMIN_DEFAULT_PASSWORD: vtys2026
     ports:
       - "5050:80"

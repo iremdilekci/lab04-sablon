@@ -59,7 +59,7 @@ def ogrno_al():
 
 
 def sorgulari_ayir(metin, on_ek):
-    parcalar = re.split(rf"--\s*Soru\s*{on_ek}\.(\d)", metin or "")
+    parcalar = re.split(rf"--\s*Soru\s*{on_ek}\.(\d)[^\n]*", metin or "")
     sorgular = {}
     for i in range(1, len(parcalar) - 1, 2):
         sorgular[int(parcalar[i])] = parcalar[i + 1].strip().rstrip(";")

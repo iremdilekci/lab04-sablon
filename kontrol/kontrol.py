@@ -220,11 +220,27 @@ def gorev_kontrol(con, dosya, on_ek, plan, baslik, toplam_puan):
     kaydet(baslik, puan, toplam_puan, " ".join(mesajlar))
 
 
+def ogrenci_metni(markdown):
+    """Markdown'dan kod bloklarini atip ogrencinin KENDI yazdigi metni birakir.
+
+    Yapay zekanin urettigi SQL'i yapistirip tek satir elestiri yazmayan
+    teslimler yalnizca uzunluga bakildiginda esigi gecip tam puan aliyordu
+    (gercek teslimlerde tespit edildi). Puan artik duz metne gore verilir.
+    """
+    m = markdown or ""
+    m = re.sub(r"```.*?```", " ", m, flags=re.S)
+    m = re.sub(r"```.*", " ", m, flags=re.S)
+    m = re.sub(r"^\s{4,}\S.*$", " ", m, flags=re.M)
+    m = re.sub(r"`[^`]*`", " ", m)
+    return re.sub(r"\s+", " ", m).strip()
+
+
 def kontrol_ai():
     icerik = oku("sonuc/ai_elestiri.md")
-    if not icerik or len(icerik.strip()) < 300:
+    if not icerik or len(ogrenci_metni(icerik)) < 300:
         kaydet("AI Köşesi", 0, 10,
-               "sonuc/ai_elestiri.md yok ya da 300 karakterden kısa. Föyde istenen iki "
+               "sonuc/ai_elestiri.md yok ya da eleştiri metniniz 300 karakterden kısa "
+               "(yapıştırdığınız kod blokları sayılmaz). Föyde istenen iki "
                "somut eleştiriyi yazdığınızda bu uzunluk zaten aşılır "
                "(içerik ayrıca asistan tarafından okunur).")
     else:
